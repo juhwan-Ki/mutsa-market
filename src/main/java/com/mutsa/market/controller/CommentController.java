@@ -25,7 +25,7 @@ public class CommentController {
     public Page<CommentDTO> readAllCommentByItem(
             @PathVariable Long itemId,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "0") Integer limit
+            @RequestParam(defaultValue = "20") Integer limit
     ){
         return service.readAllCommentByItem(itemId, page, limit);
     }
@@ -47,7 +47,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @RequestBody CommentParameter parameter
     ) {
-        return service.updateComment(itemId, commentId, parameter);
+        return service.createCommentReply(itemId, commentId, parameter);
     }
 
     // 댓글 삭제

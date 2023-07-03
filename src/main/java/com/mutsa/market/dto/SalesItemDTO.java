@@ -1,11 +1,13 @@
 package com.mutsa.market.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mutsa.market.entity.SalesItem;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SalesItemDTO {
 
     private Long id;

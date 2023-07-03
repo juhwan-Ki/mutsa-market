@@ -1,11 +1,13 @@
 package com.mutsa.market.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mutsa.market.entity.Comment;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentDTO {
     private Long id;
     @NotNull
@@ -23,13 +25,10 @@ public class CommentDTO {
 
     public static CommentDTO fromEntity(Comment comment){
         CommentDTO commentDTO = new CommentDTO();
-
         commentDTO.setId(comment.getId());
-        commentDTO.setItemId(comment.getItemId());
-        commentDTO.setWriter(comment.getWriter());
-        commentDTO.setPassword(comment.getPassword());
         commentDTO.setContent(comment.getContent());
         commentDTO.setReply(comment.getReply());
         return commentDTO;
     }
+
 }
