@@ -62,7 +62,7 @@ public class SalesItemService {
         ResponseDTO response = new ResponseDTO();
 
         // 비밀번호가 맞으면 수정
-        if(updateItem.getPassword().equals(salesItemDTO.getPassword())){
+        if(updateItem.getWriter().equals(salesItemDTO.getWriter()) && updateItem.getPassword().equals(salesItemDTO.getPassword())){
             updateItem.setTitle(salesItemDTO.getTitle());
             updateItem.setDescription(salesItemDTO.getDescription());
             updateItem.setMinPriceWanted(salesItemDTO.getMinPriceWanted());
@@ -81,8 +81,8 @@ public class SalesItemService {
     public ResponseDTO uploadItemImage(Long itemId, MultipartFile image, String writer, String password) {
         SalesItem findItem = repository.findById(itemId).orElseThrow(ItemNotFoundException::new);
 
-        // 비밀번호가 맞지 않으면 에러 발생
-        if(!findItem.getPassword().equals(password)){
+        // 작성자나 비밀번호가 맞지 않으면 에러 발생
+        if(!findItem.getWriter().equals(writer) || !findItem.getPassword().equals(password)){
             throw new PasswordException();
         }
 
@@ -118,7 +118,7 @@ public class SalesItemService {
     public ResponseDTO deleteItem(Long itemId, SalesItemParameter salesItemParameter) {
         SalesItem findItem = repository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         // 비밀번호가 맞으면 삭제
-        if(findItem.getPassword().equals(salesItemParameter.getPassword())){
+        if(findItem.getWriter().equals(salesItemParameter.getWriter()) && findItem.getPassword().equals(salesItemParameter.getPassword())){
             repository.delete(findItem);
         } else {
             throw new PasswordException();

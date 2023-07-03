@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class SalesControllerAdvice {
+public class ControllerAdvice {
 
         // 400에러 처리
         @ExceptionHandler(Status400Exception.class)

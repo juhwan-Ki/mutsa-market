@@ -2,7 +2,9 @@ package com.mutsa.market.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "salse_item")
 @Data
