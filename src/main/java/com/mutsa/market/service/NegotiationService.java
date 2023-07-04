@@ -6,6 +6,7 @@ import com.mutsa.market.dto.ResponseDTO;
 import com.mutsa.market.entity.Negotiation;
 import com.mutsa.market.entity.SalesItem;
 import com.mutsa.market.exception.ItemNotFoundException;
+import com.mutsa.market.exception.ItemStatusException;
 import com.mutsa.market.exception.PasswordException;
 import com.mutsa.market.exception.ProposalNotFoundException;
 import com.mutsa.market.repository.NegotiationRepository;
@@ -28,17 +29,20 @@ public class NegotiationService {
 
     // 구매제안 등록
     public ResponseDTO createProposal(Long itemId, NegotiationParameter parameter) {
+        SalesItem findItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
 
-        if(!salesItemRepository.existsById(itemId)){
-            throw new ItemNotFoundException();
+        // 해당 상품의 상태가 판매중일 경우에만 구매 제안을 등록하도록 함
+        if(findItem.getStatus().equals("판매중")) {
+            Negotiation entity = new Negotiation();
+            entity.setItemId(itemId);
+            entity.setWriter(parameter.getWriter());
+            entity.setPassword(parameter.getPassword());
+            entity.setSuggestedPrice(parameter.getSuggestedPrice());
+            entity.setStatus("제안");
+            negotiationRepository.save(entity);
+        } else {
+            throw new ItemStatusException();
         }
-        Negotiation entity = new Negotiation();
-        entity.setItemId(itemId);
-        entity.setWriter(parameter.getWriter());
-        entity.setPassword(parameter.getPassword());
-        entity.setSuggestedPrice(parameter.getSuggestedPrice());
-        entity.setStatus("제안");
-        negotiationRepository.save(entity);
 
         ResponseDTO response = new ResponseDTO();
         response.setMessage("구매 제안이 등록되었습니다.");
@@ -66,23 +70,27 @@ public class NegotiationService {
 
     // 수정 분기처리 메소드
     public ResponseDTO updateProposal(Long itemId, Long proposalId, NegotiationParameter parameter) {
-        if(!salesItemRepository.existsById(itemId)){
-            throw new ItemNotFoundException();
-        }
+
+        SalesItem findItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
         // API의 url이 같기 때문에 분기처리 하여 서비스를 호출
         if(parameter.getSuggestedPrice() != null){
-            return updateProposalSuggestPrice(itemId, proposalId, parameter);
+            return updateProposalSuggestPrice(itemId, proposalId, parameter, findItem);
         } else {
-            return updateProposalStatus(itemId, proposalId, parameter);
+            return updateProposalStatus(itemId, proposalId, parameter, findItem);
         }
     }
 
     // 구매 제안 삭제
     public ResponseDTO deleteProposal(Long itemId, Long proposalId, NegotiationParameter parameter) {
-        if(!salesItemRepository.existsById(itemId)){
-            throw new ItemNotFoundException();
-        }
+
+        SalesItem findItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         Negotiation findProposal = negotiationRepository.findById(proposalId).orElseThrow(ProposalNotFoundException::new);
+
+        // 해당 상품이 판매중이 아니면 에러 발생
+        if(!findItem.getStatus().equals("판매중")) {
+            throw new ItemStatusException();
+        }
 
         // 작성자와 비밀번호가 맞을 때
         if(findProposal.getWriter().equals(parameter.getWriter()) && findProposal.getPassword().equals(parameter.getPassword())){
@@ -97,11 +105,13 @@ public class NegotiationService {
     }
 
     // 구매 제안 가격 수정
-    public ResponseDTO updateProposalSuggestPrice(Long itemId, Long proposalId, NegotiationParameter parameter){
-        if(!salesItemRepository.existsById(itemId)){
-            throw new ItemNotFoundException();
-        }
+    public ResponseDTO updateProposalSuggestPrice(Long itemId, Long proposalId, NegotiationParameter parameter, SalesItem findItem){
         Negotiation findProposal = negotiationRepository.findById(proposalId).orElseThrow(ProposalNotFoundException::new);
+
+        // 해당 상품이 판매중이 아니면 에러 발생
+        if(!findItem.getStatus().equals("판매중")) {
+            throw new ItemStatusException();
+        }
 
         // 작성자와 비밀번호가 맞을 때
         if(findProposal.getWriter().equals(parameter.getWriter()) && findProposal.getPassword().equals(parameter.getPassword())){
@@ -117,13 +127,16 @@ public class NegotiationService {
     }
 
     // 구매 제안 상태 변경
-    public ResponseDTO updateProposalStatus(Long itemId, Long proposalId, NegotiationParameter parameter) {
-        if(!salesItemRepository.existsById(itemId)){
-            throw new ItemNotFoundException();
-        }
-        SalesItem findItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+    public ResponseDTO updateProposalStatus(Long itemId, Long proposalId, NegotiationParameter parameter, SalesItem findItem) {
+
         Negotiation findProposal = negotiationRepository.findById(proposalId).orElseThrow(ProposalNotFoundException::new);
         ResponseDTO response = new ResponseDTO();
+
+        // 해당 상품이 판매중이 아니면 에러 발생
+        // 판매 완료에서 다시 판매중으로 변경할 수 없다고 가정함
+        if(!findItem.getStatus().equals("판매중")) {
+            throw new ItemStatusException();
+        }
 
         // 작성자와 비밀번호가 맞을 때
         if(findItem.getWriter().equals(parameter.getWriter()) && findItem.getPassword().equals(parameter.getPassword())){
