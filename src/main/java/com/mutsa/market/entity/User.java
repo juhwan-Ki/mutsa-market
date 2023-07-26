@@ -4,16 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
+@Table(name = "Users")
 @Data
-public class Comment {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "item_id")
-    private Long itemId;
-    private String writer;
+    Long id;
+    @Column(nullable = false, unique = true)
+    private String username;
     private String password;
-    private String content;
-    private String reply;
 }

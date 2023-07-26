@@ -72,7 +72,7 @@ public class SalesItemService {
 
             response.setMessage("물품이 수정되었습니다.");
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
         return response;
     }
@@ -83,7 +83,7 @@ public class SalesItemService {
 
         // 작성자나 비밀번호가 맞지 않으면 에러 발생
         if(!findItem.getWriter().equals(writer) || !findItem.getPassword().equals(password)){
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         // 폴더 생성
@@ -121,7 +121,7 @@ public class SalesItemService {
         if(findItem.getWriter().equals(salesItemParameter.getWriter()) && findItem.getPassword().equals(salesItemParameter.getPassword())){
             repository.delete(findItem);
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         ResponseDTO response = new ResponseDTO();
