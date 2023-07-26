@@ -66,7 +66,7 @@ public class CommentService {
             updateComment.setContent(parameter.getContent());
             commentRepository.save(updateComment);
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         ResponseDTO response = new ResponseDTO();
@@ -88,7 +88,7 @@ public class CommentService {
             updateComment.setReply(parameter.getReply());
             commentRepository.save(updateComment);
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         ResponseDTO response = new ResponseDTO();
@@ -107,7 +107,7 @@ public class CommentService {
         if(comment.getWriter().equals(parameter.getWriter()) && comment.getPassword().equals(parameter.getPassword())){
             commentRepository.delete(comment);
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         ResponseDTO response = new ResponseDTO();

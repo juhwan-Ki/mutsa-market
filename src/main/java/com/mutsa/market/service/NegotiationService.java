@@ -96,7 +96,7 @@ public class NegotiationService {
         if(findProposal.getWriter().equals(parameter.getWriter()) && findProposal.getPassword().equals(parameter.getPassword())){
             negotiationRepository.delete(findProposal);
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         ResponseDTO response = new ResponseDTO();
@@ -118,7 +118,7 @@ public class NegotiationService {
             findProposal.setSuggestedPrice(parameter.getSuggestedPrice());
             negotiationRepository.save(findProposal);
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         ResponseDTO response = new ResponseDTO();
@@ -162,7 +162,7 @@ public class NegotiationService {
             negotiationRepository.saveAll(itemList);
             response.setMessage("구매가 확정되었습니다.");
         } else {
-            throw new PasswordException();
+            throw new PasswordException("작성자 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         return response;
