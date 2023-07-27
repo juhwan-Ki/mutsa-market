@@ -80,3 +80,15 @@
 
 ### 1일차 작업 API 문서
 https://documenter.getpostman.com/view/28055564/2s946pYU8f
+
+### 2일차 주요 작업
+1. 아이디와 비밀번호를 필요로 했던 테이블들은 실제 사용자 Record에 대응되도록 ERD를 수정하자.
+    - ERD 수정과 함께 해당 정보를 적당히 표현할 수 있도록 Entity를 재작성하자.
+    - 그리고 ORM의 기능을 충실히 사용할 수 있도록 어노테이션을 활용한다.
+    
+2. 다른 작성한 Entity도 변경을 진행한다.
+    - 서로 참조하고 있는 테이블 관계가 있다면, 해당 사항이 표현될 수 있도록 Entity를 재작성한다.
+  
+### 2일차 작업 API 문서
+https://documenter.getpostman.com/view/28055564/2s946pYU8f
+
