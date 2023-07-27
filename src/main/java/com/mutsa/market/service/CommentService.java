@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +29,13 @@ public class CommentService {
     // 상품 댓글 추가
     public ResponseDTO createComment(Long itemId, CommentDTO commentDTO) {
         // 댓글을 추가할 상품이 없으면 에러 발생
-        if(!checkValidation(itemId)) {
+        Optional<SalesItem> findItem = salesItemRepository.findById(itemId);
+        if(findItem.isEmpty()) {
             throw new ItemNotFoundException();
         }
+
         Comment entity = new Comment();
-        entity.setItemId(itemId);
+        entity.setSalesItem(findItem.get());
         entity.setWriter(commentDTO.getWriter());
         entity.setPassword(commentDTO.getPassword());
         entity.setContent(commentDTO.getContent());

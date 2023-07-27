@@ -30,11 +30,10 @@ public class NegotiationService {
     // 구매제안 등록
     public ResponseDTO createProposal(Long itemId, NegotiationParameter parameter) {
         SalesItem findItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
-
         // 해당 상품의 상태가 판매중일 경우에만 구매 제안을 등록하도록 함
         if(findItem.getStatus().equals("판매중")) {
             Negotiation entity = new Negotiation();
-            entity.setItemId(itemId);
+            entity.setSalesItem(findItem);
             entity.setWriter(parameter.getWriter());
             entity.setPassword(parameter.getPassword());
             entity.setSuggestedPrice(parameter.getSuggestedPrice());
@@ -58,11 +57,11 @@ public class NegotiationService {
         Page<Negotiation> negotiationPage;
         // 물품 등록자 이면
         if(findItem.getWriter().equals(writer) && findItem.getPassword().equals(password)) {
-            negotiationPage = negotiationRepository.findAllByItemId(itemId, pageable);
+            negotiationPage = negotiationRepository.findAllBySalesItem(findItem, pageable);
         }
         // 구매 제안자 이면
         else {
-            negotiationPage = negotiationRepository.findAllByItemIdAndWriterAndPassword(itemId, writer, password, pageable);
+            negotiationPage = negotiationRepository.findAllBySalesItemAndWriterAndPassword(findItem, writer, password, pageable);
         }
 
         return negotiationPage.map(NegotiationDTO::fromEntity);
@@ -155,7 +154,7 @@ public class NegotiationService {
             findItem.setStatus("판매 완료");
             salesItemRepository.save(findItem);
             // 구매 제안이 확정된 경우 확정되지 않은 다른 구매 제안의 상태는 모두 거절로 변경
-            List<Negotiation> itemList = negotiationRepository.findAllByItemIdAndIdNot(itemId, proposalId);
+            List<Negotiation> itemList = negotiationRepository.findAllBySalesItemAndIdNot(findItem, proposalId);
             for (Negotiation negotiation : itemList) {
                 negotiation.setStatus("거절");
             }

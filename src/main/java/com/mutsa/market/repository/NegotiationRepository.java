@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface NegotiationRepository extends JpaRepository<Negotiation, Long>{
-    Page<Negotiation> findAllByItemId(Long itemId, Pageable pageable);
+    Page<Negotiation> findAllBySalesItem(SalesItem item, Pageable pageable);
 
-    Page<Negotiation> findAllByItemIdAndWriterAndPassword(Long itemId, String writer, String password, Pageable pageable);
+    Page<Negotiation> findAllBySalesItemAndWriterAndPassword(SalesItem item, String writer, String password, Pageable pageable);
 
-    List<Negotiation> findAllByItemIdAndIdNot(Long itemId, Long proposalId);
+    List<Negotiation> findAllBySalesItemAndIdNot(SalesItem item, Long proposalId);
 }

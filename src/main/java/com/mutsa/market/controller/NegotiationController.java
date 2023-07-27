@@ -21,7 +21,6 @@ public class NegotiationController {
     }
 
     // 구매 제안 조회
-
     @GetMapping()
     public Page<NegotiationDTO> readAllProposal(
             @PathVariable Long itemId,

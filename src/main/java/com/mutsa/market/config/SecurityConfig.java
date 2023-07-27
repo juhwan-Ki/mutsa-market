@@ -45,6 +45,10 @@ public class SecurityConfig {
                                         "/items/**"
                                 )
                                 .authenticated()
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/items/**"
+                                ).anonymous()
                 )
                 .sessionManagement(
                         sessionManagement ->  sessionManagement
