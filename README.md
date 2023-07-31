@@ -78,8 +78,6 @@
  - 인증이 필요한 서비스는 추후(미션 후반부) 정의한다.    
 5. JWT를 받은 서비스는 사용자가 누구인지 사용자 Entity를 기준으로 정확하게 판단할 수 있어야 한다.
 
-### 1일차 작업 API 문서
-https://documenter.getpostman.com/view/28055564/2s946pYU8f
 
 ### 2일차 주요 작업
 1. 아이디와 비밀번호를 필요로 했던 테이블들은 실제 사용자 Record에 대응되도록 ERD를 수정하자.
@@ -89,6 +87,13 @@ https://documenter.getpostman.com/view/28055564/2s946pYU8f
 2. 다른 작성한 Entity도 변경을 진행한다.
     - 서로 참조하고 있는 테이블 관계가 있다면, 해당 사항이 표현될 수 있도록 Entity를 재작성한다.
   
-### 2일차 작업 API 문서
-https://documenter.getpostman.com/view/28055564/2s946pYU8f
+
+### 3일차 주요 작업
+1. 본래 “누구든지 열람할 수 있다”의 기능 목록은 사용자가 인증하지 않은 상태에서 사용할 수 있도록 한다.
+    
+2. 작성자와 비밀번호를 포함하는 데이터는 인증된 사용자만 사용할 수 있도록 한다.
+  
+### 1~3일차 작업 Collection
+
+[Uploading market-project.postman_collection.json…]
 
