@@ -78,6 +78,23 @@
  - 인증이 필요한 서비스는 추후(미션 후반부) 정의한다.    
 5. JWT를 받은 서비스는 사용자가 누구인지 사용자 Entity를 기준으로 정확하게 판단할 수 있어야 한다.
 
+POST /users/join
+```json
+{
+    "username": "kevin2",
+    "password": "kevin1234",
+    "passwordCheck": "kevin1234"
+}
+```
+
+POST /users/login
+```
+{
+    "username": "kevin",
+    "password": "kevin1234"
+}
+```
+
 
 ### 2일차 주요 작업
 1. 아이디와 비밀번호를 필요로 했던 테이블들은 실제 사용자 Record에 대응되도록 ERD를 수정하자.
@@ -87,13 +104,181 @@
 2. 다른 작성한 Entity도 변경을 진행한다.
     - 서로 참조하고 있는 테이블 관계가 있다면, 해당 사항이 표현될 수 있도록 Entity를 재작성한다.
   
+Comment
+```java
+@Entity
+@Getter
+@Setter
+public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String writer;
+    private String password;
+    private String content;
+    private String reply;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private SalesItem salesItem;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+}
+```
+
+Negotiation
+```java
+@Entity
+@Getter
+@Setter
+public class Negotiation extends BaseEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "nego_id")
+    private Long id;
+
+    @Column(name = "suggested_price")
+    private Integer suggestedPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private SalesItem salesItem;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+}
+```
+
+SalesItem
+```java
+@Entity
+@Table(name = "salse_item")
+@Getter
+@Setter
+public class SalesItem extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
+    private Long id;
+
+    private String title;
+
+    private String description;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "min_price_wanted")
+    private Integer minPriceWanted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "salesItem")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "salesItem")
+    private List<Negotiation> negotiations = new ArrayList<>();
+}
+```
+  
 
 ### 3일차 주요 작업
 1. 본래 “누구든지 열람할 수 있다”의 기능 목록은 사용자가 인증하지 않은 상태에서 사용할 수 있도록 한다.
     
 2. 작성자와 비밀번호를 포함하는 데이터는 인증된 사용자만 사용할 수 있도록 한다.
-  
-### 1~3일차 작업 Collection
 
-[Uploading market-project.postman_collection.json…]
+### salseItem
+---
+GET /items?page&limit
+```
+page = 0
+limit = 25
+```
 
+GET /items/{itemId}
+
+POST /items
+```json
+{
+    "title": "중고 맥북 팝니다2",
+    "description": "2019년 맥북 프로 13인치 모델입니다",
+    "minPriceWanted": 1000000
+}
+```
+
+DELETE /items/{itemId}
+```json
+{
+}
+```
+
+### comment
+---
+POST /items/{itemId}/comments
+```json
+{
+    "content": "할인 가능하신가요?"
+}
+```
+
+GET /items/{itemId}/comments
+
+PUT /items/{itemId}/comments/{commentId}
+```json
+{
+    "content": "할인 가능하신가요? 1000000 정도면 고려 가능합니다"
+}
+```
+
+PUT /items/{itemId}/comments/{commentId}/reply
+```json
+{
+    "reply": "안됩니다"
+}
+```
+
+DELETE /items/{itemId}/comments/{commentId}
+```json
+{}
+```
+
+### negotiation
+---
+
+POST /items/{itemId}/proposal
+```json
+{
+    "suggestedPrice": 1000000
+}
+```
+
+GET /items/{itemId}/proposal
+
+(가격변경)PUT /items/{itemId}/proposals/{proposalId}
+```json
+{
+    "suggestedPrice": 1100000
+}
+```
+
+(상태변경)PUT /items/{itemId}/proposals/{proposalId} 
+```json
+{
+    "status": "확정"
+}
+```
+
+POST /items/{itemId}/proposals/{proposalId}
+```json
+{}
+```
