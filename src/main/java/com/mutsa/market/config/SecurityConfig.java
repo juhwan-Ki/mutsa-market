@@ -47,8 +47,12 @@ public class SecurityConfig {
                                 .authenticated()
                                 .requestMatchers(
                                         HttpMethod.GET,
-                                        "/items/**"
+                                        "/items",
+                                        "items/*",
+                                        "/items/*/comments"
                                 ).anonymous()
+                                .requestMatchers("/items/*/proposals")
+                                .authenticated()
                 )
                 .sessionManagement(
                         sessionManagement ->  sessionManagement
