@@ -24,11 +24,9 @@ public class NegotiationController {
     @GetMapping()
     public Page<NegotiationDTO> readAllProposal(
             @PathVariable Long itemId,
-            @RequestParam String writer,
-            @RequestParam String password,
             @RequestParam(defaultValue = "0") Integer page
     ){
-        return service.readAllProposal(itemId, writer, password, page);
+        return service.readAllProposal(itemId, page);
     }
 
     // 구매 제안 수정 및 상태 변경

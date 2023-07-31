@@ -3,6 +3,8 @@ package com.mutsa.market.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "salse_item")
-@Data
+@Getter
+@Setter
 public class SalesItem extends BaseEntity {
 
     @Id
@@ -29,7 +32,7 @@ public class SalesItem extends BaseEntity {
     private Integer minPriceWanted;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salesItems")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "salesItem")

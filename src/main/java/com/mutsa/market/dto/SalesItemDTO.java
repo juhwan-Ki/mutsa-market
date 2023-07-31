@@ -20,8 +20,8 @@ public class SalesItemDTO {
     @NotNull
     @NotEmpty
     private Integer minPriceWanted;
-    private String writer;
-    private String password;
+//    private String writer;
+//    private String password;
     private String imageUrl;
     private String status;
 
@@ -33,8 +33,8 @@ public class SalesItemDTO {
         itemDto.setDescription(salesItem.getDescription());
         itemDto.setImageUrl(salesItem.getImageUrl());
         itemDto.setMinPriceWanted(salesItem.getMinPriceWanted());
-        itemDto.setWriter(salesItem.getWriter());
-        itemDto.setPassword(salesItem.getPassword());
+//        itemDto.setWriter(salesItem.getWriter());
+//        itemDto.setPassword(salesItem.getPassword());
         itemDto.setStatus(salesItem.getStatus());
 
         return itemDto;

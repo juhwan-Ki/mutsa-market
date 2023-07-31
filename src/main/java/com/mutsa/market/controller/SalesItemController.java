@@ -1,6 +1,5 @@
 package com.mutsa.market.controller;
 
-import com.mutsa.market.dto.SalesItemParameter;
 import com.mutsa.market.dto.ResponseDTO;
 import com.mutsa.market.dto.SalesItemDTO;
 import com.mutsa.market.service.SalesItemService;
@@ -50,19 +49,15 @@ public class SalesItemController {
     @PutMapping(value = "/{itemId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseDTO uploadItemImage(
             @PathVariable Long itemId,
-            @RequestParam MultipartFile image,
-            @RequestParam String writer,
-            @RequestParam String password
+            @RequestPart MultipartFile image
     ){
-        return service.uploadItemImage(itemId, image, writer, password);
+        return service.uploadItemImage(itemId, image);
     }
 
     // 상품 삭제
     @DeleteMapping("/{itemId}")
-    public ResponseDTO deleteItem(
-            @PathVariable Long itemId,
-            @RequestBody SalesItemParameter salesItemParameter
-            ){
-        return service.deleteItem(itemId, salesItemParameter);
+    public ResponseDTO deleteItem(@PathVariable Long itemId)
+    {
+        return service.deleteItem(itemId);
     }
 }

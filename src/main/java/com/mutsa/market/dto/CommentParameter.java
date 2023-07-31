@@ -6,6 +6,5 @@ import lombok.Data;
 public class CommentParameter {
     private String writer;
     private String content;
-    private String password;
     private String reply;
 }

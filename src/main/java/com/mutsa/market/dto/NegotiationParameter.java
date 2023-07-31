@@ -11,7 +11,4 @@ public class NegotiationParameter {
     @NotNull @NotEmpty
     private Integer suggestedPrice;
     private String status;
-    @NotNull @NotEmpty
-    private String writer;
-    private String password;
 }

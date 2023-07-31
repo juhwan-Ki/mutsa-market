@@ -51,7 +51,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 );
                 context.setAuthentication(authenticationToken);
                 SecurityContextHolder.setContext(context);
-                log.info("JWT가 정상적으로 만들어졌습니다.");
+                log.info("JWT가 정상입니다.");
             }
             else {
                 log.warn("JWT가 정상적이지 않습니다.");
